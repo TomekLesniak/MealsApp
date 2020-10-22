@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class MealItem extends StatelessWidget {
   final Meal meal;
+  final Function removeItem;
 
-  MealItem(this.meal);
+  MealItem(this.meal, this.removeItem);
 
   String get complexityText {
     switch (meal.complexity) {
@@ -25,7 +26,7 @@ class MealItem extends StatelessWidget {
   }
 
   String get affordabilityText {
-    switch(meal.affordability) {
+    switch (meal.affordability) {
       case Affordability.Affordable:
         return 'Affordable';
         break;
@@ -35,14 +36,18 @@ class MealItem extends StatelessWidget {
       case Affordability.Luxurious:
         return 'Luxurious';
         break;
-      default: 
+      default:
         return 'Unknown';
         break;
     }
   }
 
   void selectMeal(BuildContext ctx) {
-    Navigator.of(ctx).pushNamed(MealDetailScreen.routeName, arguments: meal);
+    Navigator.of(ctx)
+        .pushNamed(MealDetailScreen.routeName, arguments: meal)
+        .then((result) {
+      if (result != null) removeItem(result);
+    });
   }
 
   @override
